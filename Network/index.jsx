@@ -1,0 +1,1 @@
+export { VoituresHooks } from "./Voiture";
