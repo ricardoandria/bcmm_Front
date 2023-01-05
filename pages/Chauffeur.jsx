@@ -130,10 +130,30 @@ const Chauffeur = () => {
     setOpen(true);
   };
 
+  const [filtre, setFiltre] = useState([]);
+  const filterChauffeur = (event) => {
+    let value = event.target.value.toLowerCase();
+    let result = [];
+    console.log("toto");
+    result = chauffeurs?.getChauffeurs.filter((data) => {
+      return data.nom.toLowerCase().search(value) != -1;
+    });
+    setFiltre(result);
+  };
+
+  useEffect(() => {
+    setFiltre(chauffeurs?.getChauffeurs);
+  }, [chauffeurs]);
+
+  console.log(chauffeurs);
+
   return (
     <div className="px-6 w-full ">
       <div className="flex w-full  items-center justify-between">
-        <Search sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}>
+        <Search
+          sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}
+          onChange={filterChauffeur}
+        >
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -218,7 +238,7 @@ const Chauffeur = () => {
         className="mt-4 flex flex-wrap justify-between gap-2"
         style={{ height: 800, width: "100%" }}
       >
-        {chauffeurs?.getChauffeurs.map((chauffeur) => (
+        {filtre?.map((chauffeur) => (
           <Card sx={{ minWidth: "30%", height: 250 }}>
             <CardContent>
               <Typography

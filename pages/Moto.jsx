@@ -149,10 +149,28 @@ const Moto = () => {
     setId("");
   };
 
+  const [filtre, setFiltre] = useState([]);
+  const filterMoto = (event) => {
+    let value = event.target.value.toLowerCase();
+    let result = [];
+    console.log("toto");
+    result = data?.getMotos.filter((data) => {
+      return data.numeroImma.search(value) != -1;
+    });
+    setFiltre(result);
+  };
+
+  useEffect(() => {
+    setFiltre(data?.getMotos);
+  }, [data]);
+
   return (
     <div className="px-6 w-full ">
       <div className="flex w-full  items-center justify-between">
-        <Search sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}>
+        <Search
+          sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}
+          onChange={filterMoto}
+        >
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -353,7 +371,7 @@ const Moto = () => {
         {isLoading ? (
           <Skeleton />
         ) : (
-          data?.getMotos.map((moto) => (
+          filtre?.map((moto) => (
             <Card key={moto._id} sx={{ minWidth: "30%", height: 320 }}>
               <CardContent>
                 <div className="flex justify-between">
