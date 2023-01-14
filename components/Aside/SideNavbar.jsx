@@ -8,10 +8,6 @@ import { FaMotorcycle, FaPersonBooth } from "react-icons/fa";
 
 const menuItems = [
   {
-    href: "/",
-    title: "Dashboard",
-  },
-  {
     href: "/Voiture",
     title: "Voiture",
   },
@@ -22,10 +18,6 @@ const menuItems = [
   {
     href: "/Chauffeur",
     title: "Chauffeur",
-  },
-  {
-    href: "/Papier",
-    title: "Papier",
   },
   {
     href: "/Entretien",

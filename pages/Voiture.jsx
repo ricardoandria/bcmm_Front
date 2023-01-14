@@ -90,8 +90,6 @@ const Voiture = () => {
   const handleClose = () => setOpen(false);
   const { data: voitureById } = useGetVoitureById(id);
 
-  console.log(voitureById, "aaaaaaaaaaaaaaaaaaaa");
-
   const { data, isLoading } = useGetVoiture();
   const { mutate: deleteAuto, isLoading: deleting } = useDeleteVoiture();
   const { mutate: updateAuto, isLoading: updating } = updateVoiture(id);
@@ -119,8 +117,8 @@ const Voiture = () => {
       "dateFinAssurence",
       voitureById?.data.getVoiture?.dateFinAssurence
     );
-    setValue("NumeroVisite", voitureById?.data.getVoiture?.dateFinAssurence);
-    setValue("lieuVisite", voitureById?.data.getVoiture?.dateFinAssurence);
+    setValue("NumeroVisite", voitureById?.data.getVoiture?.NumeroVisite);
+    setValue("lieuVisite", voitureById?.data.getVoiture?.lieuVisite);
     setValue("dateDebutVisite", voitureById?.data.getVoiture?.dateFinAssurence);
     setValue("dateFinVisite", voitureById?.data.getVoiture?.dateFinAssurence);
   }, [id, voitureById]);
@@ -156,6 +154,12 @@ const Voiture = () => {
     setOpenMore(false);
     setId("");
   };
+
+  function getDayDiff(startDate, endDate) {
+    const msInDay = 24 * 60 * 60 * 1000;
+
+    return Math.round(Math.abs(endDate - startDate) / msInDay);
+  }
 
   return (
     <div className="px-6 w-full ">
@@ -366,7 +370,18 @@ const Voiture = () => {
           <Skeleton />
         ) : (
           data?.getVoitures.map((voiture) => (
-            <Card key={voiture._id} sx={{ minWidth: "30%", height: 320 }}>
+            <Card
+              className={`${
+                getDayDiff(
+                  new Date(dayjs(voiture?.dateFinVisite).format("YYYY-MM-DD")),
+                  new Date(dayjs(dateNow).format("YYYY-MM-DD"))
+                ) <= 10
+                  ? " shadow-2xl shadow-red-300"
+                  : " bg-white"
+              }`}
+              key={voiture._id}
+              sx={{ minWidth: "30%", height: 320 }}
+            >
               <CardContent>
                 <div className="flex justify-between">
                   <Typography
@@ -635,7 +650,23 @@ const Voiture = () => {
                               sx={{ marginBottom: 2 }}
                               color="text.secondary"
                             >
-                              <span className="p-2 mr-2 text-sm text-white font-semibold bg-blue-900">
+                              <span
+                                className={`${
+                                  getDayDiff(
+                                    new Date(
+                                      dayjs(
+                                        voitureById?.data?.getVoiture
+                                          ?.dateFinVisite
+                                      ).format("YYYY-MM-DD")
+                                    ),
+                                    new Date(
+                                      dayjs(dateNow).format("YYYY-MM-DD")
+                                    )
+                                  ) == 1
+                                    ? "p-2 mr-2 text-sm text-white font-semibold bg-red-500"
+                                    : "p-2 mr-2 text-sm text-white font-semibold bg-blue-900"
+                                }  `}
+                              >
                                 Date Fin Visite
                               </span>
                               <time>
