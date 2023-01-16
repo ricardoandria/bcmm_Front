@@ -20,7 +20,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
 import EntretienTableRow from "../components/TableMui/EntretienTableRow";
+import { useGetMoto } from "../Network/Moto/hooks";
+import { FormControl, MenuItem, Select } from "@mui/material";
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -83,21 +86,33 @@ const Entretien = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [openConfirme, setOpenConfirme] = React.useState(false);
   const [id, setId] = useState("");
   const { register, handleSubmit, setValue } = useForm();
   const { mutate: addEntretien } = useAddEntretiens();
   const { data: Entretiens } = useGetEntretien();
-
-  console.log(Entretiens);
-
+  const [choice, setChoice] = useState(false);
   const { data: voitures } = useGetVoiture();
+  const { data: motos } = useGetMoto();
 
+  console.log(voitures.getVoitures);
   const handleSubmitData = (values) => {
     addEntretien(values, {
       onSuccess() {
         setOpen(false);
       },
     });
+  };
+
+  const handleVoiture = () => {
+    setChoice(false);
+    setOpen(true);
+    setOpenConfirme(false);
+  };
+  const handleMoto = () => {
+    setChoice(true);
+    setOpen(true);
+    setOpenConfirme(false);
   };
 
   return (
@@ -114,7 +129,7 @@ const Entretien = () => {
         </Search>
         <div>
           <button
-            onClick={handleOpen}
+            onClick={() => setOpenConfirme(true)}
             className="hidden  md:block bg-blue-900 p-2 text-white font-semibold rounded-full "
           >
             Ajouter un Entretien
@@ -122,6 +137,29 @@ const Entretien = () => {
           <button onClick={handleOpen} className=" md:hidden">
             <GrAddCircle size={30} />
           </button>
+          <Modal
+            open={openConfirme}
+            onClose={() => setOpenConfirme(false)}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div className="flex justify-center gap-4">
+                <Button
+                  onClick={handleVoiture}
+                  className="bg-blue-900 text-white py-2"
+                >
+                  Voiture
+                </Button>
+                <Button
+                  onClick={handleMoto}
+                  className="bg-blue-900 text-white py-2"
+                >
+                  Moto
+                </Button>
+              </div>
+            </Box>
+          </Modal>
 
           <Modal
             open={open}
@@ -142,30 +180,29 @@ const Entretien = () => {
                     className="mb-4"
                     {...register("reparation", { required: true })}
                   />
-                  <div className="w-100 mb-4">
-                    <InputLabel
-                      variant="standard"
-                      htmlFor="uncontrolled-native"
-                      sx={{ width: "100%" }}
-                    >
-                      Numero Immatriculation de voiture
+                  <FormControl sx={{ m: 1, minWidth: 120, width: "45%" }}>
+                    <InputLabel id="demo-simple-select-helper-label">
+                      {choice ? "Moto" : "Voiture"}
                     </InputLabel>
-                    <NativeSelect
-                      {...register("voiture", { required: true })}
-                      defaultValue={30}
-                      sx={{ width: "100%" }}
-                      inputProps={{
-                        name: "Numero Immatriculation de voiture",
-                        id: "uncontrolled-native",
-                      }}
+                    <Select
+                      labelId="demo-simple-select-helper-label"
+                      id="demo-simple-select-helper"
+                      {...register(choice == true ? "Moto" : "voiture")}
+                      label="Age"
                     >
-                      {voitures?.getVoitures.map((voiture) => (
-                        <option key={voiture._id} value={voiture._id}>
-                          {voiture.numeroImma}
-                        </option>
-                      ))}
-                    </NativeSelect>
-                  </div>
+                      {choice
+                        ? motos?.getMotos.map((moto) => (
+                            <MenuItem value={moto._id}>
+                              {moto.numeroImma}
+                            </MenuItem>
+                          ))
+                        : voitures?.getVoitures.map((voiture) => (
+                            <MenuItem value={voiture._id}>
+                              {voiture.numeroImma}
+                            </MenuItem>
+                          ))}
+                    </Select>
+                  </FormControl>
                 </div>
 
                 <button

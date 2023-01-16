@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
@@ -160,11 +161,28 @@ const Voiture = () => {
 
     return Math.round(Math.abs(endDate - startDate) / msInDay);
   }
+  const [filtre, setFiltre] = useState([]);
+  const filterVoiture = (event) => {
+    let value = event.target.value.toLowerCase();
+    let result = [data?.getVoitures];
+    console.log(data?.getVoitures);
+    result = data?.getVoitures.filter((data) => {
+      return data.numeroImma.search(value) != -1;
+    });
+    setFiltre(result);
+  };
+
+  useEffect(() => {
+    setFiltre(data?.getVoitures);
+  }, [data]);
 
   return (
     <div className="px-6 w-full ">
       <div className="flex w-full  items-center justify-between">
-        <Search sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}>
+        <Search
+          sx={{ backgroundColor: "white", width: { xs: 200, md: 300 } }}
+          onChange={filterVoiture}
+        >
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
@@ -369,7 +387,7 @@ const Voiture = () => {
         {isLoading ? (
           <Skeleton />
         ) : (
-          data?.getVoitures.map((voiture) => (
+          filtre?.map((voiture) => (
             <Card
               className={`${
                 getDayDiff(

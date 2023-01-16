@@ -9,7 +9,9 @@ const EntretienTableRow = ({ entretien }) => {
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
-        {entretien.voiture.numeroImma}
+        {entretien?.voiture?.numeroImma
+          ? entretien?.voiture?.numeroImma
+          : entretien?.moto?.numeroImma}
       </TableCell>
       <TableCell>{entretien.reparation}</TableCell>
       <TableCell>

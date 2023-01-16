@@ -182,6 +182,23 @@ const Parcours = () => {
     setValue("consommationJour", parcour?.data.getVoyage?.consommationJour);
   }, [id, parcour]);
 
+  // const [filtre, setFiltre] = useState([]);
+  // const filterChauffeur = (event) => {
+  //   let value = event.target.value.toLowerCase();
+  //   let result = [];
+  //   console.log("toto");
+  //   result = Parcours?.getVoyages.filter((data) => {
+  //     return Parcours.nom.toLowerCase().search(value) != -1;
+  //   });
+  //   setFiltre(result);
+  // };
+
+  // useEffect(() => {
+  //   setFiltre(chauffeurs?.getChauffeurs);
+  // }, [chauffeurs]);
+
+  console.log(Parcours, "ggggggggggggg");
+
   return (
     <div className="px-6 w-full ">
       <div className="flex w-full  items-center justify-between">
