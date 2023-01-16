@@ -90,9 +90,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Chauffeur = () => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [id, setId] = useState("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    setId("");
+  };
 
   const { register, handleSubmit, setValue } = useForm();
 

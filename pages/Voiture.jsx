@@ -88,14 +88,17 @@ const Voiture = () => {
   const [openMore, setOpenMore] = useState(false);
   const [id, setId] = useState("");
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setId("");
+  };
   const { data: voitureById } = useGetVoitureById(id);
 
   const { data, isLoading } = useGetVoiture();
   const { mutate: deleteAuto, isLoading: deleting } = useDeleteVoiture();
   const { mutate: updateAuto, isLoading: updating } = updateVoiture(id);
   const { mutate: addAuto } = useAddVoitures();
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, reset } = useForm();
 
   const [dateNow, setDateNow] = useState(new Date());
 
@@ -112,16 +115,24 @@ const Voiture = () => {
     setValue("NomAgence", voitureById?.data.getVoiture?.NomAgence);
     setValue(
       "dateDebutAssurence",
-      voitureById?.data.getVoiture?.dateDebutAssurence
+      dayjs(voitureById?.data.getVoiture?.dateDebutAssurence).format(
+        "YYYY-MM-DD"
+      )
     );
     setValue(
       "dateFinAssurence",
-      voitureById?.data.getVoiture?.dateFinAssurence
+      dayjs(voitureById?.data.getVoiture?.dateFinAssurence).format("YYYY-MM-DD")
     );
     setValue("NumeroVisite", voitureById?.data.getVoiture?.NumeroVisite);
     setValue("lieuVisite", voitureById?.data.getVoiture?.lieuVisite);
-    setValue("dateDebutVisite", voitureById?.data.getVoiture?.dateFinAssurence);
-    setValue("dateFinVisite", voitureById?.data.getVoiture?.dateFinAssurence);
+    setValue(
+      "dateDebutVisite",
+      dayjs(voitureById?.data.getVoiture?.dateFinAssurence).format("YYYY-MM-DD")
+    );
+    setValue(
+      "dateFinVisite",
+      dayjs(voitureById?.data.getVoiture?.dateFinAssurence).format("YYYY-MM-DD")
+    );
   }, [id, voitureById]);
 
   const handleSubmitData = (values) => {
@@ -220,11 +231,11 @@ const Voiture = () => {
                   <TextField
                     id="outlined-basic"
                     placeholder="Marque"
-                    name="marque"
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("marque")}
                     autoFocus={true}
+                    required
                   />
                   <TextField
                     id="outlined-basic"
@@ -232,6 +243,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("anneeAcqui")}
+                    required
                   />
                 </div>
                 <div className=" flex justify-between mb-4">
@@ -241,6 +253,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("numeroImma")}
+                    required
                   />
                   <TextField
                     id="outlined-basic"
@@ -248,6 +261,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("numeroSerie")}
+                    required
                   />
                 </div>
                 <div className=" flex justify-between mb-4">
@@ -257,6 +271,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("typeCarburant")}
+                    required
                   />
                   <TextField
                     id="outlined-basic"
@@ -264,6 +279,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("consommation")}
+                    required
                   />
                 </div>
                 <div className=" flex justify-between mb-4">
@@ -273,6 +289,7 @@ const Voiture = () => {
                     variant="outlined"
                     sx={{ width: "45%" }}
                     {...register("emplacement")}
+                    required
                   />
                   <div style={{ width: "45%" }} fullWidth>
                     <InputLabel
@@ -310,6 +327,7 @@ const Voiture = () => {
                       variant="outlined"
                       sx={{ width: "45%" }}
                       {...register("NumeroAssurence")}
+                      required
                     />
                     <TextField
                       id="outlined-basic"
@@ -317,6 +335,7 @@ const Voiture = () => {
                       variant="outlined"
                       sx={{ width: "45%" }}
                       {...register("NomAgence")}
+                      required
                     />
                   </div>
 
@@ -325,11 +344,13 @@ const Voiture = () => {
                       className="px-4 py-2 border-solid border-stone-200 border-2 w-[45%]"
                       type="date"
                       {...register("dateDebutAssurence")}
+                      required
                     />
                     <input
                       className="px-4 py-2 border-solid border-stone-200 border-2 w-[45%]"
                       type="date"
                       {...register("dateFinAssurence")}
+                      required
                     />
                   </div>
                 </div>
@@ -345,6 +366,7 @@ const Voiture = () => {
                       variant="outlined"
                       sx={{ width: "45%" }}
                       {...register("NumeroVisite")}
+                      required
                     />
                     <TextField
                       id="outlined-basic"
@@ -352,6 +374,7 @@ const Voiture = () => {
                       variant="outlined"
                       sx={{ width: "45%" }}
                       {...register("lieuVisite")}
+                      required
                     />
                   </div>
 
@@ -360,11 +383,13 @@ const Voiture = () => {
                       className="px-4 py-2 border-solid border-stone-200 border-2 w-[45%]"
                       type="date"
                       {...register("dateDebutVisite")}
+                      required
                     />
                     <input
                       className="px-4 py-2 border-solid border-stone-200 border-2 w-[45%]"
                       type="date"
                       {...register("dateFinVisite")}
+                      required
                     />
                   </div>
                 </div>
@@ -437,7 +462,7 @@ const Voiture = () => {
                     Date Fin Assurence
                   </span>
                   <time>
-                    {format(parseISO(voiture.dateFinAssurence), "LLLL d, yyyy")}
+                    {dayjs(voiture.dateFinAssurence).format("DD-MM-YYYY")}
                   </time>
                 </Typography>
                 <Typography sx={{ marginBottom: 2 }} color="text.secondary">
@@ -451,7 +476,7 @@ const Voiture = () => {
                     Date Fin Visite
                   </span>
                   <time>
-                    {format(parseISO(voiture.dateFinVisite), "LLLL d, yyyy")}
+                    {dayjs(voiture.dateFinVisite).format("DD-MM-YYYY")}
                   </time>
                 </Typography>
               </CardContent>
