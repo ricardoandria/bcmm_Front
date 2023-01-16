@@ -25,6 +25,7 @@ import {
   useGetChauffeur,
   useGetChauffeurById,
 } from "../Network/Chauffeur";
+import dayjs from "dayjs";
 
 const style = {
   position: "absolute",
@@ -170,7 +171,7 @@ const Chauffeur = () => {
             onClick={handleOpen}
             className="hidden  md:block bg-blue-900 p-2 text-white font-semibold rounded-full "
           >
-            Ajouter un Moto
+            Ajouter un Chauffeur
           </button>
           <button onClick={handleOpen} className=" md:hidden">
             <GrAddCircle size={30} />
@@ -211,6 +212,29 @@ const Chauffeur = () => {
                 <div className=" flex justify-between mb-4">
                   <TextField
                     id="outlined-basic"
+                    placeholder="CIN"
+                    name="nom"
+                    variant="outlined"
+                    sx={{ width: "45%" }}
+                    {...register("cin")}
+                    autoFocus={true}
+                  />
+                  <TextField
+                    id="outlined-basic"
+                    placeholder="Numero Permis"
+                    variant="outlined"
+                    sx={{ width: "45%" }}
+                    {...register("numeroPermis")}
+                  />
+                </div>
+                <input
+                  className="px-4 py-2 mb-4 border-solid border-stone-200 border-2 w-[100%]"
+                  type="date"
+                  {...register("dateDelivrance")}
+                />
+                <div className=" flex justify-between mb-4">
+                  <TextField
+                    id="outlined-basic"
                     placeholder="Numero de Matricule"
                     variant="outlined"
                     sx={{ width: "45%" }}
@@ -242,7 +266,7 @@ const Chauffeur = () => {
         style={{ height: 800, width: "100%" }}
       >
         {filtre?.map((chauffeur) => (
-          <Card sx={{ minWidth: "30%", height: 250 }}>
+          <Card sx={{ minWidth: "30%", height: 300 }}>
             <CardContent>
               <Typography
                 color="text.secondary"
@@ -271,6 +295,19 @@ const Chauffeur = () => {
                   Numero Telephone
                 </span>
                 {chauffeur.numeroTelephone}
+              </Typography>
+              <Typography sx={{ marginBottom: 2 }} color="text.secondary">
+                <span className="p-2 mr-2 text-sm text-white font-semibold bg-blue-900">
+                  Numero CIN
+                </span>
+                {chauffeur.cin}
+              </Typography>
+              <Typography color="text.secondary">
+                <span className="p-2 mr-2 text-sm text-white font-semibold bg-blue-900">
+                  Date de delivrance Permis
+                </span>
+
+                {dayjs(chauffeur.dateDelivrance).format("DD-MM-YYYY")}
               </Typography>
             </CardContent>
             <CardActions>
